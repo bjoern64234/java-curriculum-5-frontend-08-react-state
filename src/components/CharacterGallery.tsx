@@ -1,14 +1,15 @@
 import CharacterCard from "./CharacterCard.tsx";
 import "./CharacterGallery.css";
-import { characters } from "../Characters.ts";
+import {Character} from "../types/RickAndMortyCharacter.ts";
 
 type CharacterGalleryProps = {
+    characters: Character[];
     searchText: string;
     setSearchText: (text: string) => void;
 }
 export default function CharacterGallery(props: Readonly<CharacterGalleryProps>) {
 
-    const filteredCharacters = characters
+    const filteredCharacters = props.characters
         .filter((character) => character.name.toLowerCase().includes(props.searchText.toLowerCase()));
 
     const cards = filteredCharacters.map((character) => <CharacterCard key={character.name} character={character}/>);

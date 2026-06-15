@@ -6,6 +6,7 @@ import {Route, Routes} from "react-router-dom";
 import Home from "./components/Home.tsx";
 import CharacterDetailCard from "./components/CharacterDetailCard.tsx";
 import {characters} from "./Characters.ts";
+import CharacterForm from "./components/CharacterForm.tsx";
 
 export default function App() {
     const [searchText, setSearchText] = useState("");
@@ -16,6 +17,7 @@ export default function App() {
             <Routes>
                 <Route path={"/"} element={<Home />} />
                 <Route path={"/characters"} element={<CharacterGallery characters={characters}  searchText={searchText} setSearchText={setSearchText} />} />
+                <Route path={"/character"} element={<CharacterForm />} />
                 <Route path={"/characters/:id"} element={<CharacterDetailCard characters={characters} />} />
             </Routes>
         </>

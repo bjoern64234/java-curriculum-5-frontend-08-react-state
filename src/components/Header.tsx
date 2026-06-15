@@ -15,6 +15,7 @@ export default function Header() {
             <Link to={"/"}>Home</Link>
             <Link to={"/characters"}>Characters</Link>
             <button type="button" onClick={handler}>Home</button>
+            <Link to={"/character"}>New</Link>
         </div>
     )
 }

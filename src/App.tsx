@@ -1,15 +1,23 @@
 import './App.css'
 import CharacterGallery from "./components/CharacterGallery.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Header from "./components/Header.tsx";
 import {Route, Routes} from "react-router-dom";
 import Home from "./components/Home.tsx";
 import CharacterDetailCard from "./components/CharacterDetailCard.tsx";
-import {characters} from "./Characters.ts";
 import CharacterForm from "./components/CharacterForm.tsx";
+import {Character} from "./types/RickAndMortyCharacter.ts";
+import axios from "axios";
 
 export default function App() {
     const [searchText, setSearchText] = useState("");
+    const [characters, setCharacters] = useState<Character[]>([]);
+
+    useEffect(() => {
+        axios.get("https://rickandmortyapi.com/api/character")
+            .then((res) => setCharacters(res.data.results))
+            .catch(console.error);
+    },[])
 
     return (
         <>

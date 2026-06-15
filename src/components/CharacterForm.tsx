@@ -1,4 +1,5 @@
 import {FormEvent, useState} from "react";
+import {Character} from "../types/RickAndMortyCharacter.ts";
 
 export default function CharacterForm() {
 
@@ -10,7 +11,29 @@ export default function CharacterForm() {
 
     function handleSubmit (e: FormEvent) {
         e.preventDefault();
-        console.log(firstName, lastName, species, file, status);
+
+        const newCharacter: Character = {
+            id: Math.random(),
+            name: firstName + " " + lastName,
+            status: status,
+            species: species,
+            type: "",
+            gender: "",
+            origin: {
+                name: "",
+                url: ""
+            },
+            location: {
+                name: "",
+                url: ""
+            },
+            image: file?.item(0)?.name ?? "",
+            episode: [],
+            url: "",
+            created: ""
+        }
+
+        console.log(newCharacter);
     }
 
     return (

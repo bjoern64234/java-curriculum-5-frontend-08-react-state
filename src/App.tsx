@@ -41,7 +41,7 @@ export default function App() {
             <Routes>
                 <Route path={"/"} element={<Home />} />
                 <Route path={"/characters"} element={<CharacterGallery isLoading={isLoading} page={page} setPage={setPage} characters={characters} searchText={searchText} setSearchText={setSearchText} />} />
-                <Route path={"/character"} element={<CharacterForm />} />
+                <Route path={"/character"} element={<CharacterForm characters={characters} setCharacters={setCharacters} />} />
                 <Route path={"/characters/:id"} element={<CharacterDetailCard characters={characters} />} />
             </Routes>
         </>

@@ -1,13 +1,20 @@
-import {FormEvent, useState} from "react";
+import React, {FormEvent, useState} from "react";
 import {Character} from "../types/RickAndMortyCharacter.ts";
+import {useNavigate} from "react-router-dom";
 
-export default function CharacterForm() {
+type CharacterFormProps = {
+    characters: Character[];
+    setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
+}
+export default function CharacterForm(props: Readonly<CharacterFormProps>) {
 
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
     const [species, setSpecies] = useState<string>("human");
     const [file, setFile] = useState<FileList | null>(null);
     const [status, setStatus] = useState<string>("alive");
+
+    const navigate = useNavigate();
 
     function handleSubmit (e: FormEvent) {
         e.preventDefault();
@@ -27,13 +34,14 @@ export default function CharacterForm() {
                 name: "",
                 url: ""
             },
-            image: file?.item(0)?.name ?? "",
+            image: file?.item(0) ? URL.createObjectURL(file.item(0)!) : "",
             episode: [],
             url: "",
             created: ""
         }
 
-        console.log(newCharacter);
+        props.setCharacters((prev: Character[]) => [newCharacter, ...prev]);
+        navigate("/characters");
     }
 
     return (

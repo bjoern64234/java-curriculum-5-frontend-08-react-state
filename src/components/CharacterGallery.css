@@ -3,3 +3,12 @@
     flex-wrap: wrap;
     gap: 10px;
 }
+
+.pagination-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+    cursor: pointer;
+}

@@ -9,22 +9,38 @@ import CharacterForm from "./components/CharacterForm.tsx";
 import {Character} from "./types/RickAndMortyCharacter.ts";
 import axios from "axios";
 
+
+export interface RickAndMortyApiResponse {
+    info: {
+        count: number;
+        pages: number;
+        next: string | null;
+        prev: string | null;
+    };
+    results: Character[];
+}
+
 export default function App() {
     const [searchText, setSearchText] = useState("");
     const [characters, setCharacters] = useState<Character[]>([]);
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        axios.get("https://rickandmortyapi.com/api/character")
+        setIsLoading(true);
+        setCharacters([]);
+        axios.get<RickAndMortyApiResponse>("https://rickandmortyapi.com/api/character?page=" + page)
             .then((res) => setCharacters(res.data.results))
-            .catch(console.error);
-    },[])
+            .catch(console.error)
+            .finally(() => setIsLoading(false));
+    },[page])
 
     return (
         <>
             <Header />
             <Routes>
                 <Route path={"/"} element={<Home />} />
-                <Route path={"/characters"} element={<CharacterGallery characters={characters}  searchText={searchText} setSearchText={setSearchText} />} />
+                <Route path={"/characters"} element={<CharacterGallery isLoading={isLoading} page={page} setPage={setPage} characters={characters} searchText={searchText} setSearchText={setSearchText} />} />
                 <Route path={"/character"} element={<CharacterForm />} />
                 <Route path={"/characters/:id"} element={<CharacterDetailCard characters={characters} />} />
             </Routes>

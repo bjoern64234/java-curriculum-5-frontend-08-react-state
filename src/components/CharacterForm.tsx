@@ -1,29 +1,32 @@
-import React, {FormEvent, useState} from "react";
+import "./CharacterForm.css";
+import React from "react";
 import {Character} from "../types/RickAndMortyCharacter.ts";
 import {useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
+
+type FormValues = {
+    firstName: string,
+    lastName: string,
+    image: FileList | null,
+    species: string,
+    status: string,
+}
 
 type CharacterFormProps = {
     characters: Character[];
     setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
 }
 export default function CharacterForm(props: Readonly<CharacterFormProps>) {
-
-    const [firstName, setFirstName] = useState<string>("");
-    const [lastName, setLastName] = useState<string>("");
-    const [species, setSpecies] = useState<string>("human");
-    const [file, setFile] = useState<FileList | null>(null);
-    const [status, setStatus] = useState<string>("alive");
-
     const navigate = useNavigate();
 
-    function handleSubmit (e: FormEvent) {
-        e.preventDefault();
+    const {register, handleSubmit, formState: {errors, isValid}} = useForm<FormValues>({mode: "all"});
 
+    function handleOnSubmit (data: FormValues) {
         const newCharacter: Character = {
             id: Math.random(),
-            name: firstName + " " + lastName,
-            status: status,
-            species: species,
+            name: data.firstName + " " + data.lastName,
+            status: data.status,
+            species: data.species,
             type: "",
             gender: "",
             origin: {
@@ -34,7 +37,7 @@ export default function CharacterForm(props: Readonly<CharacterFormProps>) {
                 name: "",
                 url: ""
             },
-            image: file?.item(0) ? URL.createObjectURL(file.item(0)!) : "",
+            image: data.image?.item(0) ? URL.createObjectURL(data.image.item(0)!) : "",
             episode: [],
             url: "",
             created: ""
@@ -47,48 +50,63 @@ export default function CharacterForm(props: Readonly<CharacterFormProps>) {
     return (
         <>
             <h2>Create a new character</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type={"text"}
-                    required={true}
-                    name={"firstname"}
-                    placeholder={"Firstname"}
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
-                <input
-                    type={"text"}
-                    required={true}
-                    name={"lastname"}
-                    placeholder={"Lastname"}
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                />
-                <input
-                    type={"file"}
-                    required={true}
-                    name={"image"}
-                    placeholder={"Image"}
-                    onChange={(e) => setFile(e.target.files)}
-                />
+            <form onSubmit={handleSubmit(handleOnSubmit)}>
+                <div className="form-group">
+                    <input
+                      type={"text"}
+                      {...register("firstName", {
+                          required: "First name is required",
+                          minLength: {
+                              value: 3,
+                              message: "First name must at least 3 characters.",
+                          },
+                      })}
+                      placeholder={"Firstname"}
+                    />
+                    {errors.firstName && <span className={"form-error"}>{errors.firstName.message}</span>}
+                </div>
+                <div className="form-group">
+                    <input
+                      type={"text"}
+                      {...register("lastName", {
+                          required: "Last name is required",
+                          minLength: {
+                              value: 3,
+                              message: "Last name must at least 3 characters.",
+                          },
+                      })}
+                      placeholder={"Lastname"}
+                    />
+                    {errors.lastName && <span className={"form-error"}>{errors.lastName.message}</span>}
+                </div>
+                <div className="form-group">
+                    <input
+                      type={"file"}
+                      {...register("image", {
+                          required: "A image file is required"
+                      })}
+                      placeholder={"Image"}
+                    />
+                    {errors.image && <span className={"form-error"}>{errors.image.message}</span>}
+                </div>
                 <select
-                    name={"species"}
-                    value={species}
-                    onChange={(e) => setSpecies(e.target.value)}
+                    {...register("species", {
+                        required: "A species is required"
+                    })}
                 >
                     <option value={"human"}>Human</option>
                     <option value={"alien"}>Alien</option>
                 </select>
                 <select
-                    name={"status"}
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
+                    {...register("status", {
+                        required: "A staus is required"
+                    })}
                 >
                     <option value={"alive"}>Alive</option>
                     <option value={"dead"}>Dead</option>
                     <option value={"unknown"}>unknown</option>
                 </select>
-                <button type="submit">Submit</button>
+                <button disabled={!isValid} type="submit">Submit</button>
             </form>
         </>
     )

@@ -86,6 +86,7 @@ export default function CharacterForm(props: Readonly<CharacterFormProps>) {
                 >
                     <option value={"alive"}>Alive</option>
                     <option value={"dead"}>Dead</option>
+                    <option value={"unknown"}>unknown</option>
                 </select>
                 <button type="submit">Submit</button>
             </form>

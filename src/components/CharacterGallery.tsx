@@ -19,18 +19,18 @@ export default function CharacterGallery(props: Readonly<CharacterGalleryProps>)
 
     return (
         <>
-            {props.isLoading ? (<p>Content is loading ....</p>) : (
-                <>
-                    <div className={"pagination-button"}>
-                        <button disabled={props.page === 1} onClick={() => props.setPage(props.page -1)}>Prev</button>
-                        <button disabled={props.page === props.characters.length} onClick={() => props.setPage(props.page +1)}>Next</button>
-                    </div>
-                    <div className="character-gallery">
-                        <input type="text" onChange={(e) => props.setSearchText(e.target.value)} placeholder="Search for a character"/>
-                        {filteredCharacters.length === 0 ? <p>No characters found</p> : cards}
-                    </div>
-                </>
-            )}
+            <div className={"pagination-button"}>
+                <button disabled={props.page === 1} onClick={() => props.setPage(props.page -1)}>Prev</button>
+                <button disabled={props.page === props.characters.length} onClick={() => props.setPage(props.page +1)}>Next</button>
+            </div>
+            <div className="character-gallery">
+                {props.isLoading ? <p style={{ width: "100%" }}>Content ist loading ...</p> : (
+                  <>
+                      <input type="text" onChange={(e) => props.setSearchText(e.target.value)} placeholder="Search for a character"/>
+                      {filteredCharacters.length === 0 ? <p>No characters found</p> : cards}
+                  </>
+                )}
+            </div>
         </>
     );
 }

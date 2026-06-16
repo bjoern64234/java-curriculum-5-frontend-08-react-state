@@ -1,5 +1,5 @@
 import {Character} from "../types/RickAndMortyCharacter.ts";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 type CharacterDetailProps = {
     characters: Character[];
@@ -7,6 +7,7 @@ type CharacterDetailProps = {
 export default function CharacterDetailCard(props: Readonly<CharacterDetailProps>) {
 
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const character:(Character | undefined) = props.characters.find(c => c.id === Number(id));
 
@@ -15,7 +16,7 @@ export default function CharacterDetailCard(props: Readonly<CharacterDetailProps
     }
 
     return (
-        <div className="character-card">
+        <div className="character-card" onClick={() => navigate(-1)}>
             <img src={character.image} alt={character.name}/>
             <div className="character-card-info">
                 <h3>{character.name}</h3>
